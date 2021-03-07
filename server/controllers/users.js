@@ -15,4 +15,31 @@ module.exports = {
       .then((user) => res.status(201).send(user))
       .catch((error) => res.status(400).send(error));
   },
+  list(req, res) {
+    return Users.findAll({
+      attributes: { exclude: ["password"] },
+    })
+      .then((users) => res.status(200).send(users))
+      .catch((error) => res.status(400).send(error));
+  },
+  getUser(req, res) {
+    return Users.findAll({
+      attributes: {
+        exclude: ["password"],
+      },
+      where: {
+        email: req.body.email,
+        password: req.body.password,
+      },
+    })
+      .then((user) => {
+        if (user.length < 1) {
+          return res.status(401).send({
+            message: "User is unauthorized",
+          });
+        }
+        return res.status(200).send(user);
+      })
+      .catch((error) => res.status(401).send(error));
+  },
 };
