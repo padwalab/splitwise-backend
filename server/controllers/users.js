@@ -1,4 +1,6 @@
 const Users = require("../models").Users;
+const Groups = require("../models").Groups;
+const Expenses = require("../models").Expenses;
 
 module.exports = {
   create(req, res) {
@@ -18,15 +20,20 @@ module.exports = {
   list(req, res) {
     return Users.findAll({
       attributes: { exclude: ["password"] },
+      include: [
+        { model: Groups, as: "groups" },
+        { model: Expenses, as: "expenses" },
+      ],
     })
       .then((users) => res.status(200).send(users))
       .catch((error) => res.status(400).send(error));
   },
-  getUser(req, res) {
+  validateUser(req, res) {
     return Users.findAll({
       attributes: {
         exclude: ["password"],
       },
+      include: [{ model: Groups, as: "groups" }],
       where: {
         email: req.body.email,
         password: req.body.password,
@@ -41,5 +48,25 @@ module.exports = {
         return res.status(200).send(user);
       })
       .catch((error) => res.status(401).send(error));
+  },
+  getUserId(req, res) {
+    return Users.findOne({
+      attributes: ["id", "email"],
+      where: {
+        email: req.params.userEmail,
+      },
+    })
+      .then((user) => res.status(200).send(user))
+      .catch((error) => res.status(400).send(error));
+  },
+  getUserNameFromId(req, res) {
+    return Users.findOne({
+      attributes: ["name"],
+      where: {
+        id: req.params.id,
+      },
+    })
+      .then((result) => res.status(200).send(result))
+      .catch((error) => res.status(400).send(error));
   },
 };

@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "expensesId",
         onDelete: "CASCADE",
       });
+      this.belongsTo(models.Users, {
+        foreignKey: "createdBy",
+        onDelete: "CASCADE",
+      });
     }
   }
   Expenses.init(
@@ -20,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       name: { type: DataTypes.STRING, allowNull: false },
       amount: { type: DataTypes.INTEGER, allowNull: false },
       reciept: { type: DataTypes.STRING },
+      createdBy: { type: DataTypes.INTEGER },
     },
     {
       sequelize,

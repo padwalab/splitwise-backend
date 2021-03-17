@@ -7,6 +7,7 @@ module.exports = {
       amount: req.body.amount,
       reciept: req.body.reciept,
       expensesId: req.params.expensesId,
+      createdBy: req.body.createdBy,
     })
       .then((expenses) => res.status(201).send(expenses))
       .catch((error) => res.status(400).send(error));

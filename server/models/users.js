@@ -9,6 +9,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsToMany(models.Groups, {
+        through: "UserGroups",
+        as: "groups",
+        foreignKey: "userId",
+        otherKey: "groupId",
+      });
+      this.hasMany(models.Expenses, {
+        foreignKey: "createdBy",
+        as: "expenses",
+      });
     }
   }
   Users.init(
