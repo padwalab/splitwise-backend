@@ -8,7 +8,6 @@ module.exports = (app) => {
       message: "Welcome to the Splitwise backend",
     })
   );
-  // app.post("/api/users", usersController.create);
   app.post("/signin", usersController.create);
   app.get("/api/users", usersController.list);
   app.post("/login", usersController.validateUser);
@@ -21,4 +20,11 @@ module.exports = (app) => {
   app.post("/api/groups/:groupId/add", usergroupsController.AddUserToGroup);
   app.get("/api/groups/:userId", usergroupsController.GetUserGroup);
   app.get("/api/group/:groupId", groupsController.getGroup);
+  app.get("/api/group/:groupId/members", usergroupsController.getGroupMembers);
+  app.put("/api/expenses/add_share", usergroupsController.updateUserShare);
+  app.post("/api/groups/userbalance", usergroupsController.getUserBalance);
+  app.get(
+    "/api/user/:userId/balance",
+    usergroupsController.getUserTotalBalance
+  );
 };
