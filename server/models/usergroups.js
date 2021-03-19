@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.INTEGER,
       groupId: DataTypes.INTEGER,
-      share: {type: DataTypes.INTEGER, defaultValue: 0},
+      share: { type: DataTypes.INTEGER, defaultValue: 0 },
+      userconsent: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
       sequelize,

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       email: { type: DataTypes.STRING, allowNull: false, unique: true },
       phone: { type: DataTypes.TEXT, unique: true },
       password: { type: DataTypes.STRING, allowNull: false },
-      profile_photo: { type: DataTypes.BLOB },
+      profile_photo: { type: DataTypes.STRING },
       default_currency: { type: DataTypes.STRING, defaultValue: "USD" },
       time_zone: { type: DataTypes.STRING, defaultValue: "PT" },
       language: { type: DataTypes.STRING, defaultValue: "ENG" },

@@ -9,6 +9,17 @@ module.exports = {
       userId: req.body.userId,
       groupId: req.params.groupId,
       share: 0,
+      userconsent: true,
+    })
+      .then((usergroup) => res.status(201).send(usergroup))
+      .catch((error) => res.status(400).send(error));
+  },
+  AddMemberToGroup(req, res) {
+    return UserGroups.create({
+      userId: req.body.userId,
+      groupId: req.params.groupId,
+      share: 0,
+      userconsent: false,
     })
       .then((usergroup) => res.status(201).send(usergroup))
       .catch((error) => res.status(400).send(error));
@@ -18,6 +29,7 @@ module.exports = {
     const groups = await UserGroups.findAll({
       where: {
         userId: req.params.userId,
+        userconsent: true,
       },
     });
     let i = 0;
@@ -42,15 +54,52 @@ module.exports = {
       attributes: ["userId"],
       where: {
         groupId: req.params.groupId,
+        userconsent: true,
       },
     }).then((members) => res.status(200).send(members));
   },
   updateUserShare(req, res) {
     return UserGroups.update(
       { share: Sequelize.literal(`share + ${req.body.amount}`) },
-      { where: { groupId: req.body.groupId, userId: req.body.userId } }
+      {
+        where: {
+          groupId: req.body.groupId,
+          userId: req.body.userId,
+          userconsent: true,
+        },
+      }
     )
       .then((result) => res.status(200).send(result))
+      .catch((error) => res.status(400).send(error));
+  },
+  async settleUpUser(req, res) {
+    const responses = [];
+    await UserGroups.update(
+      { share: Sequelize.literal(`share + ${req.body.amount}`) },
+      {
+        where: {
+          groupId: req.params.groupId,
+          userId: req.body.userId,
+          userconsent: true,
+        },
+      }
+    )
+      .then((result) => responses.push(result))
+      .catch((error) => res.status(400).send(error));
+    return UserGroups.update(
+      { share: Sequelize.literal(`share - ${req.body.amount}`) },
+      {
+        where: {
+          groupId: req.params.groupId,
+          userId: req.body.memberId,
+          userconsent: true,
+        },
+      }
+    )
+      .then((result) => {
+        responses.push(result);
+        res.status(200).send(responses);
+      })
       .catch((error) => res.status(400).send(error));
   },
   getUserBalance(req, res) {
@@ -67,5 +116,38 @@ module.exports = {
         userId: req.params.userId,
       },
     }).then((sum) => res.status(200).send(sum.toString()));
+  },
+  getUserInvitations(req, res) {
+    return UserGroups.findAll({
+      where: {
+        userId: req.params.userId,
+        userconsent: false,
+      },
+    })
+      .then((userGroups) => res.status(200).send(userGroups))
+      .catch((error) => res.status(400).send(error));
+  },
+  acceptGroupInvitation(req, res) {
+    return UserGroups.update(
+      { userconsent: true },
+      {
+        where: {
+          userId: req.body.userId,
+          groupId: req.params.groupId,
+        },
+      }
+    )
+      .then((result) => res.status(200).send(result))
+      .catch((error) => res.status(400).send(error));
+  },
+  exitGroup(req, res) {
+    return UserGroups.destroy({
+      where: {
+        userId: req.body.userId,
+        groupId: req.params.groupId,
+      },
+    })
+      .then((result) => res.status(200).send(result))
+      .catch((error) => res.status(400).send(error));
   },
 };

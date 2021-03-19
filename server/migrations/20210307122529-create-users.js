@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
       },
       profile_photo: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
       },
       default_currency: {
         type: Sequelize.STRING,
