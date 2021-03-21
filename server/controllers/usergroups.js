@@ -1,9 +1,19 @@
 const UserGroups = require("../models").UserGroups;
 const Groups = require("../models").Groups;
 const Expenses = require("../models").Expenses;
+const Payments = require("../models").Payments;
 const { Sequelize } = require("sequelize");
 
 module.exports = {
+  getPayment(req, res) {
+    Payments.findAll({
+      where: {
+        groupToId: req.params.groupId,
+      },
+    })
+      .then((result) => res.status(200).send(result))
+      .catch((error) => res.status(400).send(error));
+  },
   AddUserToGroup(req, res) {
     return UserGroups.create({
       userId: req.body.userId,
@@ -35,7 +45,10 @@ module.exports = {
     let i = 0;
     for (i = 0; i < groups.length; i++) {
       const groupDetail = await Groups.findOne({
-        include: [{ model: Expenses, as: "expenseItems" }],
+        include: [
+          { model: Expenses, as: "expenseItems" },
+          { model: Payments, as: "payments" },
+        ],
         where: {
           id: groups[i].groupId,
         },
@@ -84,7 +97,7 @@ module.exports = {
         },
       }
     )
-      .then((result) => responses.push(result))
+      .then((result) => Payments)
       .catch((error) => res.status(400).send(error));
     return UserGroups.update(
       { share: Sequelize.literal(`share - ${req.body.amount}`) },
@@ -97,6 +110,12 @@ module.exports = {
       }
     )
       .then((result) => {
+        Payments.create({
+          payeeName: req.body.userId,
+          payerName: req.body.memberId,
+          groupToId: req.params.groupId,
+          amount: req.body.amount,
+        });
         responses.push(result);
         res.status(200).send(responses);
       })

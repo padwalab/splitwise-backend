@@ -2,6 +2,7 @@ const usersController = require("../controllers").users;
 const groupsController = require("../controllers").groups;
 const expensesController = require("../controllers").expenses;
 const usergroupsController = require("../controllers").usergroups;
+
 module.exports = (app) => {
   app.get("/api", (req, res) =>
     res.status(200).send({
@@ -23,6 +24,7 @@ module.exports = (app) => {
     "/api/groups/:groupId/addmember",
     usergroupsController.AddMemberToGroup
   );
+  app.get("/api/group/:groupId/payments", usergroupsController.getPayment);
   app.post("/api/groups/:groupId/add", usergroupsController.AddUserToGroup);
   app.get(
     "/api/groups/:userId/invitations",

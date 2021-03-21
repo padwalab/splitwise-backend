@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "expensesId",
         as: "expenseItems",
       });
+      this.hasMany(models.Payments, {
+        foreignKey: "groupToId",
+        as: "payments",
+      });
       this.belongsToMany(models.Users, {
         through: "UserGroups",
         as: "users",
