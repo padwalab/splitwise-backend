@@ -48,7 +48,7 @@ module.exports = {
         time_zone: req.body.time_zone,
         language: req.body.language,
       },
-      { where: { email: req.params.email } }
+      { where: { email: req.params.email }, returning: true, plain: true }
     )
       .then((user) => res.status(200).send(user))
       .catch((error) => res.status(400).send(error));

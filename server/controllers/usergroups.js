@@ -111,8 +111,8 @@ module.exports = {
     )
       .then((result) => {
         Payments.create({
-          payeeName: req.body.userId,
-          payerName: req.body.memberId,
+          payeeName: req.body.payeeName,
+          payerName: req.body.payerName,
           groupToId: req.params.groupId,
           amount: req.body.amount,
         });

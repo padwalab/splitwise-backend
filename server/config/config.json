@@ -12,6 +12,19 @@
       "idle": 10000
     }
   },
+  "containerized": {
+    "username": "postgres",
+    "password": "docker",
+    "database": "splitwise-dev",
+    "host": "splitwise-db",
+    "dialect": "postgres",
+    "pool": {
+      "max": 10,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    }
+  },
   "test": {
     "username": "root",
     "password": null,

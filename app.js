@@ -15,5 +15,4 @@ app.get("*", (req, res) =>
     message: "Welcome to the Splitwise BackEnd...",
   })
 );
-
 module.exports = app;
