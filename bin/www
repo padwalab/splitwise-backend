@@ -1,8 +1,15 @@
 const http = require("http");
 const app = require("../app");
+const mongoose = require('mongoose');
+const db = require("../server/mongomodels/index");
 
-const port = parseInt(process.env.PORT, 10) || 8000;
-app.set("port", port);
+const StartServer = () => {
+    const port = parseInt(process.env.PORT, 10) || 8000;
+    app.set("port", port);
+    new db();
+    const server = http.createServer(app);
+    server.listen(port);
+}
 
-const server = http.createServer(app);
-server.listen(port);
+StartServer();
+
