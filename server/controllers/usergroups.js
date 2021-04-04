@@ -3,6 +3,8 @@ const Groups = require("../models").Groups;
 const Expenses = require("../models").Expenses;
 const Payments = require("../models").Payments;
 const { Sequelize } = require("sequelize");
+import { UserGroup } from "../mongomodels/usergroups";
+import { User } from "../mongomodels//users";
 
 module.exports = {
   getPayment(req, res) {
@@ -15,17 +17,24 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
   AddUserToGroup(req, res) {
-    return UserGroups.create({
+    return UserGroup.create({
       userId: req.body.userId,
       groupId: req.params.groupId,
       share: 0,
       userconsent: true,
     })
-      .then((usergroup) => res.status(201).send(usergroup))
+      .then((usergroup) => {
+        User.updateOne(
+          { email: member },
+          { $push: { groups: req.params.groupId } }
+        )
+          .then((user) => res.status(201).send(usergroup))
+          .catch((error) => res.status(400).send(error));
+      })
       .catch((error) => res.status(400).send(error));
   },
   AddMemberToGroup(req, res) {
-    return UserGroups.create({
+    return UserGroup.create({
       userId: req.body.userId,
       groupId: req.params.groupId,
       share: 0,

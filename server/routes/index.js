@@ -16,10 +16,13 @@ module.exports = (app) => {
   app.post("/login", usersController.validateUser);
   app.get("/api/users/:userEmail", usersController.getUserId);
   app.get("/api/user/:id", usersController.getUserNameFromId);
+  app.get("/api/userlist", usersController.getUsersList);
+
   app.post("/api/groups", groupsController.create);
   app.get("/api/groups", groupsController.list);
-  app.post("/api/groups/:expensesId/expense", expensesController.create);
-  app.get("/api/expenses", expensesController.list);
+  app.get("/api/group/:groupId", groupsController.getGroup);
+  app.post("/api/groups/create", groupsController.createAddUsers);
+
   app.post(
     "/api/groups/:groupId/addmember",
     usergroupsController.AddMemberToGroup
@@ -35,7 +38,6 @@ module.exports = (app) => {
     usergroupsController.acceptGroupInvitation
   );
   app.get("/api/groups/:userId", usergroupsController.GetUserGroup);
-  app.get("/api/group/:groupId", groupsController.getGroup);
   app.get("/api/group/:groupId/members", usergroupsController.getGroupMembers);
   app.put("/api/expenses/add_share", usergroupsController.updateUserShare);
   app.post("/api/groups/userbalance", usergroupsController.getUserBalance);
@@ -45,5 +47,7 @@ module.exports = (app) => {
     usergroupsController.getUserTotalBalance
   );
   app.post("/api/groups/:groupId/settleup", usergroupsController.settleUpUser);
-  app.get("/api/userlist", usersController.getUsersList);
+
+  app.post("/api/groups/:expensesId/expense", expensesController.create);
+  app.get("/api/expenses", expensesController.list);
 };

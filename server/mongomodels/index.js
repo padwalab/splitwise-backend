@@ -19,7 +19,15 @@ class Database {
       .catch((error) => {
         console.log("Database connection failed ");
       });
+    mongoose.set("toJSON", {
+      virtuals: true,
+      versionKey: false,
+      transform: (doc, converted) => {
+        delete converted._id;
+      },
+    });
   }
 }
 
-module.exports = Database;
+// module.exports = new Database();
+export const db = new Database();

@@ -6,7 +6,7 @@ const db = require("../server/mongomodels/index");
 const StartServer = () => {
     const port = parseInt(process.env.PORT, 10) || 8000;
     app.set("port", port);
-    new db();
+    // new db();
     const server = http.createServer(app);
     server.listen(port);
 }
