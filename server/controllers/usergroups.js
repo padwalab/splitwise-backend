@@ -5,6 +5,7 @@ const Payments = require("../models").Payments;
 const { Sequelize } = require("sequelize");
 import { UserGroup } from "../mongomodels/usergroups";
 import { User } from "../mongomodels//users";
+import { Group } from "../mongomodels/group";
 
 module.exports = {
   getPayment(req, res) {
@@ -17,21 +18,30 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
   AddUserToGroup(req, res) {
-    return UserGroup.create({
-      userId: req.body.userId,
-      groupId: req.params.groupId,
-      share: 0,
-      userconsent: true,
-    })
-      .then((usergroup) => {
-        User.updateOne(
-          { email: member },
-          { $push: { groups: req.params.groupId } }
-        )
-          .then((user) => res.status(201).send(usergroup))
-          .catch((error) => res.status(400).send(error));
-      })
-      .catch((error) => res.status(400).send(error));
+    // return UserGroup.create({
+    //   userId: req.body.userId,
+    //   groupId: req.params.groupId,
+    //   share: 0,
+    //   userconsent: true,
+    // })
+    //   .then((usergroup) => {
+    //     User.updateOne(
+    //       { email: member },
+    //       { $push: { groups: req.params.groupId } }
+    //     )
+    //       .then((user) => res.status(201).send(usergroup))
+    //       .catch((error) => res.status(400).send(error));
+    //   })
+    //   .catch((error) => res.status(400).send(error));
+    return Group.updateOne(
+      { _id: req.params.groupId },
+      { $push: { users: req.body.userId } }
+    ).then((result) =>
+      User.updateOne(
+        { _id: req.body.userId },
+        { $push: { groups: req.params.groupId } }
+      )
+    );
   },
   AddMemberToGroup(req, res) {
     return UserGroup.create({

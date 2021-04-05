@@ -80,8 +80,10 @@ module.exports = {
   validateUser(req, res) {
     return User.findOne(
       { email: req.body.email, password: req.body.password },
-      "id name email phone profile_photo default_currency time_zone language"
+      "-password"
+      // "id name email phone profile_photo default_currency time_zone language"
     )
+      .populate("groups", "-users")
       .then((user) =>
         user
           ? res.status(200).send(user)

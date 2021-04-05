@@ -50,4 +50,7 @@ module.exports = (app) => {
 
   app.post("/api/groups/:expensesId/expense", expensesController.create);
   app.get("/api/expenses", expensesController.list);
+  app.get("/api/createa/:name", expensesController.createA);
+  app.get("/api/createb/:id/:name", expensesController.createB);
+  app.get("/api/as/:id", expensesController.getas);
 };

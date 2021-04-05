@@ -10,11 +10,26 @@ module.exports = {
     // return Groups.create({
     //   name: req.body.name,
     // })
-    return Group.create({
-      name: req.body.name,
-    })
-      .then((group) => res.status(201).send(group))
-      .catch((error) => res.status(400).send(error));
+    return (
+      Group.create({
+        name: req.body.name,
+        users: req.body.members,
+      })
+        // .then((group) => res.status(201).send(group))
+        .then((group) => {
+          group.users.forEach((user) => {
+            console.log(user);
+            User.updateOne(
+              { _id: user.memberId },
+              { $push: { groups: group._id } }
+            )
+              .then((result) => console.log(result))
+              .catch((error) => console.log(error));
+          });
+          res.status(201).send(group);
+        })
+        .catch((error) => res.status(400).send(error))
+    );
   },
   createAddUsers(req, res) {
     return Group.create({
