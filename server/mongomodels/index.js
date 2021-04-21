@@ -1,6 +1,6 @@
 let mongoose = require("mongoose");
 
-const server = "localhost:27017";
+const server = "splitwise_mongo:27017";
 const database = "test";
 
 class Database {
