@@ -27,9 +27,6 @@ module.exports = {
       )
       .catch((error) => res.status(400).send(error));
   },
-  // addMember(req, res){
-  //   return Groups.addUsers(Users.findOne({where: {email: req.body.email}}))
-  // }
   list(req, res) {
     return Groups.findAll({
       include: [{ model: Expenses, as: "expenseItems" }],
@@ -49,5 +46,4 @@ module.exports = {
       },
     }).then((resultGroup) => res.status(200).send(resultGroup));
   },
-  
 };

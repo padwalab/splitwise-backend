@@ -15,13 +15,3 @@ it("should login the user", function (done) {
       done();
     });
 });
-// describe("Server up and running", function () {
-//   describe("Root ping", function () {
-//     var url = "http://localhost:8000/api";
-//     it("returs status 200", function () {
-//       request(url, function (error, response, body) {
-//         expect(response.statusCode).to.equal(200);
-//       });
-//     });
-//   });
-// });
