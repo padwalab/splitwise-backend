@@ -1,6 +1,7 @@
 import { User } from "../../models/user";
 import { Group } from "../../models/group";
 import { Membership } from "../../models/membership";
+const jwt = require("jsonwebtoken");
 
 export let UserHandler = {};
 
@@ -53,7 +54,9 @@ UserHandler.login = (params, body, res) => {
     })
     .then((user) => {
       user
-        ? res.status(200).send(user)
+        ? jwt.sign({ user }, "secret", (err, token) => {
+            res.status(200).send({ user, token });
+          })
         : res.status(404).send({ message: "User does not exist" });
     })
     .catch((error) => res.status(401).send(error));

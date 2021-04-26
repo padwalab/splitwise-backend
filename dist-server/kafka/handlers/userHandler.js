@@ -11,6 +11,8 @@ var _group = require("../../models/group");
 
 var _membership = require("../../models/membership");
 
+var jwt = require("jsonwebtoken");
+
 var UserHandler = {};
 exports.UserHandler = UserHandler;
 
@@ -67,7 +69,14 @@ UserHandler.login = function (params, body, res) {
       }
     }
   }).then(function (user) {
-    user ? res.status(200).send(user) : res.status(404).send({
+    user ? jwt.sign({
+      user: user
+    }, "secret", function (err, token) {
+      res.status(200).send({
+        user: user,
+        token: token
+      });
+    }) : res.status(404).send({
       message: "User does not exist"
     });
   })["catch"](function (error) {
